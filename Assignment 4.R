@@ -6,3 +6,11 @@
 
 # Loading tidyverse package.
 library(tidyverse)
+
+# Loading ufo_subset.csv. "read_csv" is used to create a tibble. Initial dataset does not contain spaces in column names.
+ufo_data <- read_csv("ufo_subset.csv")
+
+# Tidying ufo_data according to the assignment requirements.
+ufo_data_tidy <- ufo_data %>%
+  mutate(shape = if_else(is.na(shape), "unknown", shape)) %>%          # Finding rows where 'shape' is missing, and replacing with "unknown" by checking if the value is NA
+  
