@@ -7,8 +7,10 @@
 # Loading tidyverse package.
 library(tidyverse)
 
-# Loading ufo_subset.csv. "read_csv" is used to create a tibble. Initial dataset does not contain spaces in column names.
+# Loading ufo_subset.csv. "read_csv" is used to create a tibble. 
 ufo_data <- read_csv("ufo_subset.csv")
+# Removing spaces in ufo_data column names using make.names(), which replaces space characters with a "."
+names(ufo_data) <- make.names(names(ufo_data), unique = TRUE)
 
 # Tidying ufo_data according to the assignment requirements.
 ufo_data_tidy <- ufo_data %>%
