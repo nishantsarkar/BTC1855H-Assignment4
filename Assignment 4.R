@@ -45,5 +45,17 @@ view(delay_summary)
 # Investigating duration.seconds column.
 sum(is.na(ufo_data_tidy$duration.seconds))           # Returns zero, there are no missing values
 all(is.numeric(ufo_data_tidy$duration.seconds))      # Returns TRUE, all values are numeric
+any(ufo_data_tidy$duration.seconds < 0)              # Returns FALSE, all values are positive (including zero)
+summary(ufo_data_tidy$duration.seconds)              #' It seems that there are some incredibly large values - the max is 82.8 million seconds, which is 26 years. There are clearly some values in duration.seconds that are far too big. The median is 180 seconds (~3 minutes) with 3Q = 600 seconds
+                                                     #' (10 minutes), so there is a small number of very large values. Furthermore, some reports have a duration of 0, which is not possible. duration.seconds should be modified to have an upper and lower limit on the range.
+
+# Fixing duration.seconds column's range issue by filtering rows where duration.seconds = 0 or 86400 seconds (24 hours)
+# Used 24 hours as an arbitrary cutoff just because UFO sightings that are longer than that seem too excessive.
+ufo_data_tidy <- ufo_data_tidy %>%
+  filter(duration.seconds < 86400) %>%
+  filter(duration.seconds > 0)
+
+# Creating a histogram of duration.seconds. Using Log10 duration.seconds to accomodate for very large values.
+hist((log(ufo_data_tidy$duration.seconds)), main = "UFO Sightings per Duration", xlab = "Log 10 Duration of Sighting (seconds)", ylab = "Number of Sightings", xlim = c(-2, 12))
 
 # NOTE: I wasn't able to figure out how to impute countries from the city column.
