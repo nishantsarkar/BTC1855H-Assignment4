@@ -3,6 +3,7 @@
 
 #' This code completes the requirements set out in the "Assignment 4" module.
 #' Please ensure that ufo_subset.csv is in your working directory.
+#' See the bottom for an additional note. 
 
 #' Loading tidyverse package.
 #' Ensure you have tidyverse installed (not just dplyr!)
@@ -28,11 +29,21 @@ ufo_data_tidy <- ufo_data %>%
   mutate(report_delay = as.numeric(date_posted - datetime)) %>%         # Adding report_delay column. Calculating report delay by subtracting datetime from date posted. Negative values indicate an event that is posted before it happened.
   filter(report_delay >= 0)                                             # Removing rows where the report delay is negative.
   
-# Creating a table reporting the percentage of hoax sightings per country. It first groups the tibble by country, then uses the summary() function to create a summary table. The summary table calculates the mean of "is_hoax" for each group and multiplies by 100 to find the percentage of
+# Creating a tibble reporting the percentage of hoax sightings per country. It first groups the tibble by country, then uses the summary() function to create a summary table. The summary table calculates the mean of "is_hoax" for each group and multiplies by 100 to find the percentage of
 # TRUE values in the is_hoax column. 
 percent_hoax <- ufo_data_tidy %>%
   group_by(country) %>%
   summarize(percent_hoax = mean(is_hoax, na.rm = TRUE)*100)
 view(percent_hoax)
 
+# Creating a tibble reporting the average reporting delay per country in days - groups tibble by country, then creates summary table summarizing mean report_delay per country.
+delay_summary <- ufo_data_tidy %>%
+  group_by(country) %>%
+  summarize(average_delay = mean(report_delay))
+view(delay_summary)
 
+# Investigating duration.seconds column.
+sum(is.na(ufo_data_tidy$duration.seconds))           # Returns zero, there are no missing values
+all(is.numeric(ufo_data_tidy$duration.seconds))      # Returns TRUE, all values are numeric
+
+# NOTE: I wasn't able to figure out how to impute countries from the city column.
