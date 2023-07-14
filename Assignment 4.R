@@ -61,4 +61,7 @@ ufo_data_tidy <- ufo_data_tidy %>%
 # Creating a histogram of duration.seconds. Using Log10 duration.seconds to accomodate for very large values.
 hist((log(ufo_data_tidy$duration.seconds)), main = "UFO Sightings per Duration", xlab = "Log 10 Duration of Sighting (seconds)", ylab = "Number of Sightings", xlim = c(-2, 12))
 
-# NOTE: I wasn't able to figure out how to impute countries from the city column.
+#' NOTE FOR REVIEWER: I wasn't able to figure out how to impute countries from the city column. I imagine that you could check to see if Country is missing, then check if the 'City' entry has parentheses. In the original dataset, cities with a designated country would have
+#' it inside parentheses. After the check, you could pull the first two characters inside the parenthesis for a contry code (ex. ca for Canada, fr for France). Then, if there isn't a parentheses, you could just remove the row altogether since we want to remove rows where
+#' country information is missing. The issue is that there are country codes that don't follow this format (ex. us instead of un for United States), and there are a lot of things inside parentheses that aren't countries. I have no clue how you could check for only countries, 
+#' maybe you might have an idea?
